@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>РемонтПро - Заказ ремонта</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>РемонтПро</h1>
+    <p>Профессиональный ремонт квартир и офисов</p>
+    <label>
+      <input type="checkbox" id="dark-mode-toggle"> Тёмная тема
+    </label>
+  </header>
+  <main>
+    <div class="progress-bar" id="progress-bar"></div>
+    <!-- Шаг 1: Тип помещения -->
+    <section id="step-1" class="step" aria-label="Выбор типа помещения">
+      <h2>Выберите тип помещения</h2>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="premise-type" value="Квартира" required>
+          <span>🏠 Квартира</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="premise-type" value="Офис">
+          <span>🏢 Офис</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="premise-type" value="Частный дом">
+          <span>🏡 Частный дом</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="premise-type" value="Коммерческое помещение">
+          <span>🏬 Коммерческое помещение</span>
+        </label>
+      </div>
+      <label for="area">Площадь помещения (м²)</label>
+      <input type="number" id="area" name="area" min="1" required>
+      <div class="buttons">
+        <button class="next-step">Далее</button>
+      </div>
+    </section>
+
+    <!-- Шаг 2: Услуги -->
+    <section id="step-2" class="step" aria-label="Выбор услуг">
+      <h2>Выберите необходимые услуги</h2>
+      <div class="options">
+        <label class="option">
+          <input type="checkbox" name="services" value="Покраска стен">
+          <span>🎨 Покраска стен</span>
+        </label>
+        <label class="option">
+          <input type="checkbox" name="services" value="Укладка пола">
+          <span>🪚 Укладка пола</span>
+        </label>
+        <label class="option">
+          <input type="checkbox" name="services" value="Сантехника">
+          <span>🚿 Сантехника</span>
+        </label>
+      </div>
+      <div class="cost">
+        <p>🧮 Предварительная стоимость: <span id="cost">0 ₽</span></p>
+        <small>*Окончательная стоимость после осмотра</small>
+      </div>
+      <div class="buttons">
+        <button class="back-step">Назад</button>
+        <button class="next-step">Далее</button>
+      </div>
+    </section>
+
+    <!-- Шаг 3: Детали -->
+    <section id="step-3" class="step" aria-label="Детали заказа">
+      <h2>Детали заказа</h2>
+      <div class="form-group">
+        <label>Срочность выполнения</label>
+        <label><input type="radio" name="urgency" value="normal" checked> Обычная (в течение недели)</label>
+        <label><input type="radio" name="urgency" value="priority"> Приоритетная (+20%)</label>
+        <label><input type="radio" name="urgency" value="urgent"> Срочная (+50%)</label>
+      </div>
+      <div class="form-group">
+        <label for="date">📅 Предпочтительная дата</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+      <div class="form-group">
+        <label for="time">🕐 Удобное время</label>
+        <select id="time" name="time" required>
+          <option value="" disabled selected>Выберите время</option>
+          <option value="Утром">Утром (9:00-12:00)</option>
+          <option value="Днем">Днем (12:00-15:00)</option>
+          <option value="Вечером">Вечером (15:00-18:00)</option>
+        </select>
+      </div>
+      <div class="buttons">
+        <button class="back-step">Назад</button>
+        <button class="next-step">Далее</button>
+      </div>
+    </section>
+
+    <!-- Шаг 4: Контакты -->
+    <section id="step-4" class="step" aria-label="Контактная информация">
+      <h2>Контактная информация</h2>
+      <div class="form-group">
+        <label for="name">Ваше имя</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">📞 Номер телефона</label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+      <div class="form-group">
+        <label for="email">📧 Email (необязательно)</label>
+        <input type="email" id="email" name="email">
+      </div>
+      <div class="summary">
+        <h3>Сводка заказа</h3>
+        <div id="summary-content"></div>
+        <p>Итого: <span id="final-cost">0 ₽</span></p>
+      </div>
+      <div class="buttons">
+        <button class="back-step">Назад</button>
+        <button class="submit">Оформить заказ</button>
+      </div>
+    </section>
+
+    <!-- Шаг 5: Подтверждение -->
+    <section id="step-5" class="step" aria-label="Подтверждение заказа">
+      <div class="success">
+        <h2>✓ Заказ успешно оформлен!</h2>
+        <p>Спасибо за обращение! Наш менеджер свяжется с вами в течение 30 минут.</p>
+        <p>Ваш заказ №<span id="order-number">1234</span></p>
+        <button class="new-order">Оформить новый заказ</button>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>⭐⭐⭐⭐⭐ 4.9 (2,847 отзывов)</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
