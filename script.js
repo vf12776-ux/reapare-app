@@ -117,19 +117,40 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
-  // Подсчёт стоимости
+  // ПРАВИЛЬНЫЙ подсчёт стоимости
   function updateCost() {
     const area = parseFloat(document.querySelector('#area').value) || 0;
     const services = document.querySelectorAll('input[name="services"]:checked');
-    const urgency = document.querySelector('input[name="urgency"]:checked')?.value;
-    let basePrice = area * 5000; // 5000 ₽/м²
-    basePrice += services.length * 10000; // 10000 ₽ за услугу
+    const urgency = document.querySelector('input[name="urgency"]:checked')?.value || 'normal';
+    
+    // Реалистичные цены
+    let basePrice = area * 1500; // 1500 ₽/м² базовая стоимость
+    
+    // Стоимость услуг (зависят от площади)
+    let servicesPrice = 0;
+    services.forEach(service => {
+      switch(service.value) {
+        case 'Покраска стен':
+          servicesPrice += area * 300; // 300 ₽/м²
+          break;
+        case 'Укладка пола':
+          servicesPrice += area * 800; // 800 ₽/м²
+          break;
+        case 'Сантехника':
+          servicesPrice += 15000; // Фиксированная стоимость
+          break;
+      }
+    });
+    
+    // Умножитель срочности
     let multiplier = 1;
     if (urgency === 'priority') multiplier = 1.2;
     if (urgency === 'urgent') multiplier = 1.5;
-    const total = Math.round(basePrice * multiplier);
-    document.getElementById('cost').textContent = `${total} ₽`;
-    document.getElementById('final-cost').textContent = `${total} ₽`;
+    
+    const total = Math.round((basePrice + servicesPrice) * multiplier);
+    
+    document.getElementById('cost').textContent = `${total.toLocaleString()} ₽`;
+    document.getElementById('final-cost').textContent = `${total.toLocaleString()} ₽`;
   }
 
   // Обновление сводки
@@ -149,8 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // Обновление стоимости при изменении услуг или срочности
-  document.querySelectorAll('input[name="services"], input[name="urgency"]').forEach(input => {
+  // Обновление стоимости при изменении ЛЮБЫХ параметров
+  document.querySelectorAll('#area, input[name="services"], input[name="urgency"]').forEach(input => {
     input.addEventListener('change', updateCost);
+    input.addEventListener('input', updateCost);
   });
 });
