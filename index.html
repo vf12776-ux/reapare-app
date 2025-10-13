@@ -10,13 +10,15 @@
   <header>
     <h1>РемонтПро</h1>
     <p>Профессиональный ремонт квартир и офисов</p>
-    <label>
-      <input type="checkbox" id="dark-mode-toggle"> Тёмная тема
-    </label>
+    <div class="header-links">
+      <label>
+        <input type="checkbox" id="dark-mode-toggle"> Тёмная тема
+      </label>
+      <a href="admin.html" class="admin-link">⚙️ Для мастеров</a>
+    </div>
   </header>
   <main>
     <div class="progress-bar" id="progress-bar"></div>
-    
     <!-- Шаг 1: Тип помещения -->
     <section id="step-1" class="step" aria-label="Выбор типа помещения">
       <h2>Выберите тип помещения</h2>
@@ -181,6 +183,7 @@
   </main>
   <footer>
     <p>⭐⭐⭐⭐⭐ 4.9 (2,847 отзывов)</p>
+    <p class="admin-hint">Мастер? <a href="admin.html">Настройте цены здесь</a></p>
   </footer>
   <script src="script.js"></script>
 </body>
