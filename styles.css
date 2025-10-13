@@ -36,6 +36,30 @@ header p {
   margin-bottom: 1rem;
 }
 
+.header-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.admin-link {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.admin-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
 main {
   max-width: 800px;
   margin: 0 auto;
@@ -310,6 +334,129 @@ body.dark-mode small {
   color: #aaa;
 }
 
+.admin-hint {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.admin-hint a {
+  color: #8a9eff;
+  text-decoration: none;
+}
+
+.admin-hint a:hover {
+  text-decoration: underline;
+}
+
+/* Стили для админки */
+.admin-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.price-section {
+  background: white;
+  padding: 25px;
+  margin-bottom: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .price-section {
+  background: #2d2d2d;
+}
+
+.price-group {
+  margin-bottom: 20px;
+}
+
+.price-group label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.price-group span {
+  font-weight: 600;
+  color: #333;
+}
+
+body.dark-mode .price-group span {
+  color: #f0f0f0;
+}
+
+.price-group input {
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
+}
+
+.price-group small {
+  color: #666;
+  font-size: 0.9em;
+}
+
+body.dark-mode .price-group small {
+  color: #aaa;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 30px 0;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.preview {
+  background: #e8f5e8;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+body.dark-mode .preview {
+  background: #2d4a2d;
+}
+
+.back-link {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   header h1 {
     font-size: 2rem;
@@ -324,6 +471,19 @@ body.dark-mode small {
   }
   
   button {
+    width: 100%;
+  }
+  
+  .header-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .admin-actions {
+    flex-direction: column;
+  }
+  
+  .btn-primary, .btn-secondary {
     width: 100%;
   }
 }
