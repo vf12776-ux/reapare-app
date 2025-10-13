@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
           premise: document.querySelector('input[name="premise-type"]:checked')?.value,
           area: document.querySelector('#area').value,
           services: Array.from(document.querySelectorAll('input[name="services"]:checked')).map(s => s.value),
+          additional: Array.from(document.querySelectorAll('input[name="additional"]:checked')).map(s => s.value),
+          paintingType: document.querySelector('input[name="painting-type"]:checked')?.value,
           urgency: document.querySelector('input[name="urgency"]:checked')?.value,
           date: document.querySelector('#date').value,
           time: document.querySelector('#time').value,
@@ -74,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentStep = 1;
     steps[currentStep - 1].classList.add('active');
     document.querySelector('form').reset();
+    document.getElementById('painting-details').style.display = 'none';
     updateCost();
     updateSummary();
     progressBar.style.width = `${(currentStep / 5) * 100}%`;
@@ -117,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
-  // ПРАВИЛЬНЫЙ подсчёт стоимости
+  // ПРАВИЛЬНЫЙ подсчёт стоимости с детализацией
   function updateCost() {
     const area = parseFloat(document.querySelector('#area').value) || 0;
     const services = document.querySelectorAll('input[name="services"]:checked');
@@ -126,12 +129,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Реалистичные цены
     let basePrice = area * 1500; // 1500 ₽/м² базовая стоимость
     
-    // Стоимость услуг (зависят от площади)
+    // Стоимость основных услуг
     let servicesPrice = 0;
     services.forEach(service => {
       switch(service.value) {
         case 'Покраска стен':
-          servicesPrice += area * 300; // 300 ₽/м²
+          const paintingType = document.querySelector('input[name="painting-type"]:checked');
+          const paintingMultiplier = paintingType ? parseFloat(paintingType.dataset.multiplier) : 1;
+          servicesPrice += area * 300 * paintingMultiplier; // 300 ₽/м² × множитель
           break;
         case 'Укладка пола':
           servicesPrice += area * 800; // 800 ₽/м²
@@ -142,12 +147,25 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     
+    // Дополнительные услуги
+    let additionalPrice = 0;
+    document.querySelectorAll('input[name="additional"]:checked').forEach(additional => {
+      const price = parseFloat(additional.dataset.price);
+      if (additional.value === 'primer' || additional.value === 'protection') {
+        // Услуги с ценой за м²
+        additionalPrice += area * price;
+      } else {
+        // Фиксированная стоимость
+        additionalPrice += price;
+      }
+    });
+    
     // Умножитель срочности
     let multiplier = 1;
     if (urgency === 'priority') multiplier = 1.2;
     if (urgency === 'urgent') multiplier = 1.5;
     
-    const total = Math.round((basePrice + servicesPrice) * multiplier);
+    const total = Math.round((basePrice + servicesPrice + additionalPrice) * multiplier);
     
     document.getElementById('cost').textContent = `${total.toLocaleString()} ₽`;
     document.getElementById('final-cost').textContent = `${total.toLocaleString()} ₽`;
@@ -158,20 +176,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const premise = document.querySelector('input[name="premise-type"]:checked')?.value || 'Не выбрано';
     const area = document.querySelector('#area').value || 0;
     const services = Array.from(document.querySelectorAll('input[name="services"]:checked')).map(s => s.value);
+    const additional = Array.from(document.querySelectorAll('input[name="additional"]:checked')).map(s => s.value);
+    const paintingType = document.querySelector('input[name="painting-type"]:checked')?.value;
     const urgency = document.querySelector('input[name="urgency"]:checked')?.value || 'normal';
     const date = document.querySelector('#date').value;
     const time = document.querySelector('#time').value;
+    
+    let paintingDetail = '';
+    if (services.includes('Покраска стен') && paintingType) {
+      paintingDetail = paintingType === 'one-layer' ? ' (в один слой)' : 
+                      paintingType === 'two-layers' ? ' (в два слоя)' : 
+                      ' (покраска обоев)';
+    }
+    
     document.getElementById('summary-content').innerHTML = `
       <p>Тип помещения: ${premise}</p>
       <p>Площадь: ${area} м²</p>
-      <p>Услуги: ${services.join(', ') || 'Не выбрано'}</p>
+      <p>Услуги: ${services.map((s, i) => s + (i === services.indexOf('Покраска стен') ? paintingDetail : '')).join(', ') || 'Не выбрано'}</p>
+      <p>Дополнительно: ${additional.join(', ') || 'Нет'}</p>
       <p>Срочность: ${urgency === 'normal' ? 'Обычная' : urgency === 'priority' ? 'Приоритетная' : 'Срочная'}</p>
       <p>Дата и время: ${date} ${time}</p>
     `;
   }
 
+  // Показ/скрытие деталей покраски
+  document.querySelectorAll('input[name="services"]').forEach(service => {
+    service.addEventListener('change', function() {
+      const paintingDetails = document.getElementById('painting-details');
+      if (this.value === 'Покраска стен' && this.checked) {
+        paintingDetails.style.display = 'block';
+      } else if (this.value === 'Покраска стен' && !this.checked) {
+        paintingDetails.style.display = 'none';
+      }
+      updateCost();
+    });
+  });
+
   // Обновление стоимости при изменении ЛЮБЫХ параметров
-  document.querySelectorAll('#area, input[name="services"], input[name="urgency"]').forEach(input => {
+  document.querySelectorAll('#area, input[name="services"], input[name="urgency"], input[name="painting-type"], input[name="additional"]').forEach(input => {
     input.addEventListener('change', updateCost);
     input.addEventListener('input', updateCost);
   });
