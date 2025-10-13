@@ -16,6 +16,7 @@
   </header>
   <main>
     <div class="progress-bar" id="progress-bar"></div>
+    
     <!-- Шаг 1: Тип помещения -->
     <section id="step-1" class="step" aria-label="Выбор типа помещения">
       <h2>Выберите тип помещения</h2>
@@ -49,7 +50,7 @@
       <h2>Выберите необходимые услуги</h2>
       <div class="options">
         <label class="option">
-          <input type="checkbox" name="services" value="Покраска стен">
+          <input type="checkbox" name="services" value="Покраска стен" data-service="painting">
           <span>🎨 Покраска стен</span>
         </label>
         <label class="option">
@@ -61,6 +62,49 @@
           <span>🚿 Сантехника</span>
         </label>
       </div>
+
+      <!-- Детали покраски -->
+      <div class="service-details" id="painting-details" style="display: none;">
+        <h3>🎨 Детали покраски:</h3>
+        <div class="detail-options">
+          <label class="detail-option">
+            <input type="radio" name="painting-type" value="one-layer" data-multiplier="0.8">
+            <span>В один слой (-20%)</span>
+          </label>
+          <label class="detail-option">
+            <input type="radio" name="painting-type" value="two-layers" data-multiplier="1" checked>
+            <span>В два слоя (стандарт)</span>
+          </label>
+          <label class="detail-option">
+            <input type="radio" name="painting-type" value="wallpaper" data-multiplier="1.15">
+            <span>Покраска обоев (+15%)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Дополнительные услуги -->
+      <div class="additional-services">
+        <h3>📦 Дополнительные услуги:</h3>
+        <div class="options">
+          <label class="option">
+            <input type="checkbox" name="additional" value="primer" data-price="50">
+            <span>🧴 Грунтовка (+50 ₽/м²)</span>
+          </label>
+          <label class="option">
+            <input type="checkbox" name="additional" value="protection" data-price="30">
+            <span>📦 Укрывание поверхностей (+30 ₽/м²)</span>
+          </label>
+          <label class="option">
+            <input type="checkbox" name="additional" value="cleaning" data-price="5000">
+            <span>🧹 Уборка после ремонта (+5000 ₽)</span>
+          </label>
+          <label class="option">
+            <input type="checkbox" name="additional" value="garbage" data-price="3000">
+            <span>🗑️ Вынос мусора (+3000 ₽)</span>
+          </label>
+        </div>
+      </div>
+
       <div class="cost">
         <p>🧮 Предварительная стоимость: <span id="cost">0 ₽</span></p>
         <small>*Окончательная стоимость после осмотра</small>
