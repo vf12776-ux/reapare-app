@@ -120,14 +120,41 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
+  // Загрузка цен из localStorage
+  function getPrices() {
+    const saved = localStorage.getItem('repairPrices');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+    // Стандартные цены
+    return {
+      base: 1500,
+      painting: 300,
+      floor: 800,
+      plumbing: 15000,
+      primer: 50,
+      protection: 30,
+      cleaning: 5000,
+      garbage: 3000
+    };
+  }
+
+  function getMultipliers() {
+    const saved = localStorage.getItem('urgencyMultipliers');
+    return saved ? JSON.parse(saved) : { priority: 1.2, urgent: 1.5 };
+  }
+
   // ПРАВИЛЬНЫЙ подсчёт стоимости с детализацией
   function updateCost() {
     const area = parseFloat(document.querySelector('#area').value) || 0;
     const services = document.querySelectorAll('input[name="services"]:checked');
     const urgency = document.querySelector('input[name="urgency"]:checked')?.value || 'normal';
     
+    const PRICES = getPrices();
+    const MULTIPLIERS = getMultipliers();
+    
     // Реалистичные цены
-    let basePrice = area * 1500; // 1500 ₽/м² базовая стоимость
+    let basePrice = area * PRICES.base; // 1500 ₽/м² базовая стоимость
     
     // Стоимость основных услуг
     let servicesPrice = 0;
@@ -136,13 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'Покраска стен':
           const paintingType = document.querySelector('input[name="painting-type"]:checked');
           const paintingMultiplier = paintingType ? parseFloat(paintingType.dataset.multiplier) : 1;
-          servicesPrice += area * 300 * paintingMultiplier; // 300 ₽/м² × множитель
+          servicesPrice += area * PRICES.painting * paintingMultiplier; // 300 ₽/м² × множитель
           break;
         case 'Укладка пола':
-          servicesPrice += area * 800; // 800 ₽/м²
+          servicesPrice += area * PRICES.floor; // 800 ₽/м²
           break;
         case 'Сантехника':
-          servicesPrice += 15000; // Фиксированная стоимость
+          servicesPrice += PRICES.plumbing; // Фиксированная стоимость
           break;
       }
     });
@@ -162,8 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Умножитель срочности
     let multiplier = 1;
-    if (urgency === 'priority') multiplier = 1.2;
-    if (urgency === 'urgent') multiplier = 1.5;
+    if (urgency === 'priority') multiplier = MULTIPLIERS.priority;
+    if (urgency === 'urgent') multiplier = MULTIPLIERS.urgent;
     
     const total = Math.round((basePrice + servicesPrice + additionalPrice) * multiplier);
     
